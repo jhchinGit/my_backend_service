@@ -18,6 +18,13 @@ namespace MyBackendService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options => options.AddDefaultPolicy(builder =>
+            {
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            }));
+
+            services.AddHttpClient();
+
             services.AddControllers();
         }
 
@@ -28,6 +35,8 @@ namespace MyBackendService
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors();
 
             app.UseRouting();
 
