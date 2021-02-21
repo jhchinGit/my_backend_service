@@ -3,45 +3,45 @@ using System;
 
 namespace MyBackendService.Models.DTOs
 {
-    public class CovidDailyReport
+    public record CovidDailyReport
     {
         [JsonProperty("totalCase")]
-        public int TotalCase { get; set; }
+        public int TotalCase { get; init; }
 
         [JsonProperty("newCase")]
-        public int NewCase { get; set; }
+        public int NewCase { get; init; }
 
         [JsonProperty("newCaseRate")]
-        public decimal NewCaseRate { get; set; }
+        public decimal NewCaseRate { get; init; }
 
         [JsonProperty("recovered")]
-        public int Recovered { get; set; }
+        public int Recovered { get; init; }
 
         [JsonProperty("recoveredNew")]
-        public int RecoveredNew { get; set; }
+        public int RecoveredNew { get; init; }
 
         [JsonProperty("recoveredNew")]
-        public decimal RecoveredRate { get; set; }
+        public decimal RecoveredRate { get; init; }
 
         [JsonProperty("activeCase")]
-        public int ActiveCase { get; set; }
+        public int ActiveCase { get; init; }
 
         [JsonProperty("todayActiveCase")]
-        public int TodayActiveCase { get; set; }
+        public int TodayActiveCase { get; init; }
 
         [JsonProperty("activeRate")]
-        public decimal ActiveRate { get; set; }
+        public decimal ActiveRate { get; init; }
 
         [JsonProperty("death")]
-        public int Death { get; set; }
+        public int Death { get; init; }
 
         [JsonProperty("todayDeathCase")]
-        public int TodayDeathCase { get; set; }
+        public int TodayDeathCase { get; init; }
 
         [JsonProperty("deathRate")]
-        public decimal DeathRate { get; set; }
+        public decimal DeathRate { get; init; }
 
         [JsonProperty("reportedDate")]
-        public DateTime ReportedDate { get; set; }
+        public DateTime ReportedDate { get; init; }
     }
 }

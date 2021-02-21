@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MyBackendService.Businesses;
 
 namespace MyBackendService
 {
@@ -26,6 +27,8 @@ namespace MyBackendService
             services.AddHttpClient();
 
             services.AddControllers();
+
+            services.AddTransient<ICovidDailyReportManager, CovidDailyReportManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

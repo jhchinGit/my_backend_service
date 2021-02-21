@@ -2,8 +2,6 @@
 using MyBackendService.Models.DTOs;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -19,7 +17,7 @@ namespace MyBackendService.Services
             _clientFactory = clientFactory;
         }
 
-        public async Task<RangeDto<MalaysiaCovidReport>> GetMalaysiaCovidReportAsync()
+        public async Task<RangeDto<MalaysiaCovidReport>> GetCovidReportAsync()
         {
             IsSuccess = false;
 
@@ -30,18 +28,79 @@ namespace MyBackendService.Services
 
             var response = await client.SendAsync(request);
 
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                var responseJson = await response.Content.ReadAsStringAsync();
+                return null;
+            }
+
+            var result = new RangeDto<MalaysiaCovidReport>
+            {
+                Start = new MalaysiaCovidReport(),
+                End = new MalaysiaCovidReport()
+            };
+
+            var responseJson = await response.Content.ReadAsStringAsync();
+            try
+            {
                 var responseJArray = JArray.Parse(responseJson);
-                var lastJArray = responseJArray.Last;
-                var lastJarray2 = responseJArray[responseJArray.Count - 1];
-                return null;
+
+                if (responseJArray.Count == 0)
+                {
+                    return null;
+                }
+
+                var latestReportJToken = responseJArray.Last;
+
+                result.End = new MalaysiaCovidReport
+                {
+                    TestedPositive = ExtractJToken<int>("testedPositive", latestReportJToken),
+                    Recovered = ExtractJToken<int>("recovered", latestReportJToken),
+                    ActiveCase = ExtractJToken<int>("activeCases", latestReportJToken),
+                    Deceased = ExtractJToken<int>("deceased", latestReportJToken),
+                    LastUpdatedAtApify = ExtractJToken<DateTime>("lastUpdatedAtApify", latestReportJToken),
+                };
+
+                for (int index = responseJArray.Count - 2; index >= 0; index--)
+                {
+                    var reportDate = ExtractJToken<DateTime>("lastUpdatedAtApify", responseJArray[index]);
+
+                    if (reportDate.Year == result.End.LastUpdatedAtApify.Year &&
+                        reportDate.Month == result.End.LastUpdatedAtApify.Month &&
+                        reportDate.Day == result.End.LastUpdatedAtApify.Day)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        result.Start = new MalaysiaCovidReport
+                        {
+                            TestedPositive = ExtractJToken<int>("testedPositive", responseJArray[index]),
+                            Recovered = ExtractJToken<int>("recovered", responseJArray[index]),
+                            ActiveCase = ExtractJToken<int>("activeCases", responseJArray[index]),
+                            Deceased = ExtractJToken<int>("deceased", responseJArray[index]),
+                            LastUpdatedAtApify = ExtractJToken<DateTime>("lastUpdatedAtApify", responseJArray[index]),
+                        };
+                        break;
+                    }
+                }
+
+                IsSuccess = true;
             }
-            else
+            catch
             {
-                return null;
             }
+
+            return result;
+        }
+
+        private static T ExtractJToken<T>(string key, JToken jToken)
+        {
+            if (jToken[key] == null)
+            {
+                return default;
+            }
+
+            return jToken[key].ToObject<T>();
         }
     }
 }
