@@ -18,7 +18,7 @@ namespace MyBackendService_Tests
         {
             var actualResult = CovidReportHelper.CalculateRate(todayCase, yesterdayCase);
 
-            expectedResult.ShouldBe(actualResult);
+            actualResult.ShouldBe(expectedResult);
         }
     }
 }
