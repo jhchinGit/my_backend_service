@@ -10,6 +10,11 @@
 
   <ItemGroup>
     <Folder Include="Models\POCOs\" />
+    <Folder Include="Utilities\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyBackendService.Utility\MyBackendService.Utility.csproj" />
   </ItemGroup>
 
 

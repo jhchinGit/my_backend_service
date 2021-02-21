@@ -1,4 +1,4 @@
-﻿namespace MyBackendService
+﻿namespace MyBackendService.Utility
 {
     public static class CovidReportHelper
     {

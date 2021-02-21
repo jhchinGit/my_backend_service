@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyBackendService", "MyBackendService\MyBackendService.csproj", "{7BCD4EEA-E946-498A-B271-CA3AB0D6C60D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyBackendService", "MyBackendService\MyBackendService.csproj", "{7BCD4EEA-E946-498A-B271-CA3AB0D6C60D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyBackendService_Tests", "MyBackendService_Tests\MyBackendService_Tests.csproj", "{3D3F13D3-B771-42EC-BAF6-4892E8F254DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyBackendService.Utility", "MyBackendService.Utility\MyBackendService.Utility.csproj", "{2463E278-DBD9-42ED-8E00-572470E64891}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{7BCD4EEA-E946-498A-B271-CA3AB0D6C60D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BCD4EEA-E946-498A-B271-CA3AB0D6C60D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BCD4EEA-E946-498A-B271-CA3AB0D6C60D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D3F13D3-B771-42EC-BAF6-4892E8F254DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D3F13D3-B771-42EC-BAF6-4892E8F254DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D3F13D3-B771-42EC-BAF6-4892E8F254DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D3F13D3-B771-42EC-BAF6-4892E8F254DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2463E278-DBD9-42ED-8E00-572470E64891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2463E278-DBD9-42ED-8E00-572470E64891}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2463E278-DBD9-42ED-8E00-572470E64891}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2463E278-DBD9-42ED-8E00-572470E64891}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
