@@ -38,7 +38,7 @@ namespace MyBackendService
                 options.Authority = "https://localhost:5001";
                 options.RequireHttpsMetadata = false;
 
-                options.ApiName = "api1";
+                options.ApiName = "muffin_identity_api";
             });
 
             services.AddTransient<ICovidDailyReportManager, CovidDailyReportManager>();
