@@ -33,6 +33,14 @@ namespace MyBackendService
 
             services.AddControllers();
 
+            services.AddAuthentication("Bearer").AddIdentityServerAuthentication(options =>
+            {
+                options.Authority = "https://localhost:5001";
+                options.RequireHttpsMetadata = false;
+
+                options.ApiName = "api1";
+            });
+
             services.AddTransient<ICovidDailyReportManager, CovidDailyReportManager>();
         }
 
@@ -47,6 +55,8 @@ namespace MyBackendService
             app.UseCors();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MyBackendService.Businesses;
 using MyBackendService.Models;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace MyBackendService.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController, Authorize]
     public class CovidController : ApiControllerBase
     {
         private readonly ILogger<CovidController> _logger;
