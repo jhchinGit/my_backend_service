@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 namespace MyBackendService.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController, Authorize]
+    [ApiController]
+    [Authorize]
     public class CovidController : ApiControllerBase
     {
         private readonly ILogger<CovidController> _logger;

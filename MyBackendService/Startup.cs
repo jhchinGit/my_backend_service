@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -33,12 +34,14 @@ namespace MyBackendService
 
             services.AddControllers();
 
-            services.AddAuthentication("Bearer").AddIdentityServerAuthentication(options =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
-                options.Authority = "https://localhost:5001";
+                options.Authority = "http://192.168.0.142/identityServer";
                 options.RequireHttpsMetadata = false;
 
-                options.ApiName = "muffin_identity_api";
+                options.Audience = "muffinscopeapi";
+                options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
             });
 
             services.AddTransient<ICovidDailyReportManager, CovidDailyReportManager>();
