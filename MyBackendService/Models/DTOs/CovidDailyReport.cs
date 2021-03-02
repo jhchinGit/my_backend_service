@@ -20,7 +20,7 @@ namespace MyBackendService.Models.DTOs
         [JsonProperty("recoveredNew")]
         public int RecoveredNew { get; init; }
 
-        [JsonProperty("recoveredNew")]
+        [JsonProperty("recoveredRate")]
         public decimal RecoveredRate { get; init; }
 
         [JsonProperty("activeCase")]
