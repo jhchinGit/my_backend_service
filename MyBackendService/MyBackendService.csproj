@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Utilities\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MyBackendService.Utility\MyBackendService.Utility.csproj" />
   </ItemGroup>
 

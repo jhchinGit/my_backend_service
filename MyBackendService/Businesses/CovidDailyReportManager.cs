@@ -92,7 +92,7 @@ namespace MyBackendService.Businesses
                     DeathRate = CovidReportHelper.CalculateRate(
                         todayCase: malaysiaCovidReportsRange.End.Deceased, yesterdayCase: 0),
 
-                    ReportedDate = malaysiaCovidReportsRange.End.LastUpdatedAtApify
+                    ReportedDateStr = malaysiaCovidReportsRange.End.LastUpdatedAtApify.ToDynamicString()
                 });
             }
             else
@@ -127,7 +127,7 @@ namespace MyBackendService.Businesses
                     (todayCase: malaysiaCovidReportsRange.End.Deceased,
                     yesterdayCase: malaysiaCovidReportsRange.Start.Deceased),
 
-                    ReportedDate = malaysiaCovidReportsRange.End.LastUpdatedAtApify.AddHours(4)
+                    ReportedDateStr = malaysiaCovidReportsRange.End.LastUpdatedAtApify.AddHours(4).ToDynamicString()
                 });
             }
         }
@@ -176,7 +176,7 @@ namespace MyBackendService.Businesses
                      (todayCase: indiaCovidReport.Deaths,
                      yesterdayCase: yesterdayDeathCase),
 
-                ReportedDate = indiaCovidReport.LastUpdatedAtApify.AddHours(4)
+                ReportedDateStr = indiaCovidReport.LastUpdatedAtApify.ToDynamicString()
             });
         }
     }
