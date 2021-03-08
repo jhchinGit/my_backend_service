@@ -13,12 +13,16 @@ namespace MyBackendService.Businesses
     {
         private readonly IHttpClientFactory _clientFactory;
         private readonly RepositoryContext _context;
+        private readonly ICacheManager _cacheManager;
 
-        public CovidDailyReportManager(IHttpClientFactory clientFactory,
-            RepositoryContext context)
+        public CovidDailyReportManager(
+            IHttpClientFactory clientFactory,
+            RepositoryContext context,
+            ICacheManager cacheManager)
         {
             _clientFactory = clientFactory;
             _context = context;
+            _cacheManager = cacheManager;
         }
 
         public async Task GetDailyReportAsync(Country country,
@@ -59,6 +63,13 @@ namespace MyBackendService.Businesses
 
         private async Task<(bool isSuccess, CovidDailyReport dailyReport)> GetMalaysiaReportAsync()
         {
+            var (isSuccess, dailyReport) = await _cacheManager
+                .GetAsync<CovidDailyReport>(CacheKey.Malaysia_Covid_Report.ToString());
+            if (isSuccess)
+            {
+                return (isSuccess, dailyReport);
+            }
+
             var service = new MalaysiaCovidService(_clientFactory);
             var malaysiaCovidReportsRange = await service.GetCovidReportAsync();
 
@@ -70,7 +81,7 @@ namespace MyBackendService.Businesses
 
             if (malaysiaCovidReportsRange.Start == null)
             {
-                return (true, new CovidDailyReport
+                dailyReport = new CovidDailyReport
                 {
                     TotalCase = malaysiaCovidReportsRange.End.TestedPositive,
                     NewCase = malaysiaCovidReportsRange.End.TestedPositive,
@@ -93,11 +104,11 @@ namespace MyBackendService.Businesses
                         todayCase: malaysiaCovidReportsRange.End.Deceased, yesterdayCase: 0),
 
                     ReportedDateStr = malaysiaCovidReportsRange.End.LastUpdatedAtApify.ToDynamicString()
-                });
+                };
             }
             else
             {
-                return (true, new CovidDailyReport
+                dailyReport = new CovidDailyReport
                 {
                     TotalCase = malaysiaCovidReportsRange.End.TestedPositive,
                     NewCase = malaysiaCovidReportsRange.End.TestedPositive -
@@ -128,12 +139,23 @@ namespace MyBackendService.Businesses
                     yesterdayCase: malaysiaCovidReportsRange.Start.Deceased),
 
                     ReportedDateStr = malaysiaCovidReportsRange.End.LastUpdatedAtApify.AddHours(4).ToDynamicString()
-                });
+                };
             }
+
+            await _cacheManager.SetAsync(CacheKey.Malaysia_Covid_Report.ToString(), dailyReport);
+
+            return (true, dailyReport);
         }
 
         private async Task<(bool isSuccess, CovidDailyReport dailyReport)> GetIndiaReportAsync()
         {
+            var (isSuccess, dailyReport) = await _cacheManager
+                .GetAsync<CovidDailyReport>(CacheKey.India_Covid_Report.ToString());
+            if (isSuccess)
+            {
+                return (isSuccess, dailyReport);
+            }
+
             var service = new IndiaCovidService(_clientFactory);
             var indiaCovidReport = await service.GetCovidReportAsync();
 
@@ -150,7 +172,7 @@ namespace MyBackendService.Businesses
             var yesterdayRecoveredCase = indiaCovidReport.Recovered - indiaCovidReport.RecoveredNew;
             var yesterdayDeathCase = indiaCovidReport.Deaths - indiaCovidReport.DeathsNew;
 
-            return (true, new CovidDailyReport
+            dailyReport = new CovidDailyReport
             {
                 TotalCase = indiaCovidReport.TotalCases,
                 NewCase = newCase,
@@ -177,7 +199,11 @@ namespace MyBackendService.Businesses
                      yesterdayCase: yesterdayDeathCase),
 
                 ReportedDateStr = indiaCovidReport.LastUpdatedAtApify.ToDynamicString()
-            });
+            };
+
+            await _cacheManager.SetAsync(CacheKey.India_Covid_Report.ToString(), dailyReport);
+
+            return (true, dailyReport);
         }
     }
 }

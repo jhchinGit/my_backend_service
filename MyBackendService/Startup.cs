@@ -27,6 +27,12 @@ namespace MyBackendService
                 builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             }));
 
+            services.AddStackExchangeRedisCache(action =>
+            {
+                action.InstanceName = "redis";
+                action.Configuration = "localhost:6379";
+            });
+
             services.AddDbContext<RepositoryContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("DefaultConncetion")));
 
@@ -46,6 +52,7 @@ namespace MyBackendService
             });
 
             services.AddTransient<ICovidDailyReportManager, CovidDailyReportManager>();
+            services.AddSingleton<ICacheManager, CacheManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
