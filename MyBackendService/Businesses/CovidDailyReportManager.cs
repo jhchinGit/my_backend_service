@@ -28,6 +28,8 @@ namespace MyBackendService.Businesses
         public async Task GetDailyReportAsync(Country country,
             Action<CovidDailyReport> onSuccess, Action<string> onError)
         {
+            MessageQueueService.Send(TopicKey.TraceLog,
+                "CovidDailyReportManager.cs - GetDailyReportAsync(Country), Country: " + country);
             var userprofile = _context.UserProfiles.SingleOrDefault(i => i.Username == "testing");
             switch (country)
             {
@@ -143,7 +145,7 @@ namespace MyBackendService.Businesses
             }
 
             await _cacheManager.SetAsync(CacheKey.Malaysia_Covid_Report.ToString(), dailyReport);
-
+            MessageQueueService.Send(TopicKey.TraceLog, "CovidDailyReportManager.cs - GetMalaysiaReportAsync succeed");
             return (true, dailyReport);
         }
 
@@ -202,7 +204,7 @@ namespace MyBackendService.Businesses
             };
 
             await _cacheManager.SetAsync(CacheKey.India_Covid_Report.ToString(), dailyReport);
-
+            MessageQueueService.Send(TopicKey.TraceLog, "CovidDailyReportManager.cs - GetIndiaReportAsync succeed");
             return (true, dailyReport);
         }
     }

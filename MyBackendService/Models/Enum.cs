@@ -11,4 +11,9 @@
         Malaysia_Covid_Report = 0,
         India_Covid_Report = 1
     }
+
+    public enum TopicKey
+    {
+        TraceLog = 1
+    }
 }
