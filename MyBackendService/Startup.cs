@@ -42,7 +42,7 @@ namespace MyBackendService
 
             services.AddAuthentication("Bearer").AddJwtBearer(options =>
             {
-                options.Authority = "http://localhost/identityServer";
+                options.Authority = "http://192.168.50.207/identityServer";
                 options.RequireHttpsMetadata = false;
                 options.Audience = "muffinscopeapi";
                 options.TokenValidationParameters = new TokenValidationParameters()
