@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using MyBackendService.Businesses;
 using MyBackendService.Models;
 using MyBackendService.Models.DTOs;
@@ -13,14 +12,9 @@ namespace MyBackendService.Controllers
     [Authorize]
     public class CovidController : ApiControllerBase
     {
-        private readonly ILogger<CovidController> _logger;
         private readonly ICovidDailyReportManager _dailyReportManager;
 
-        public CovidController(ILogger<CovidController> logger, ICovidDailyReportManager dailyReportManager)
-        {
-            _logger = logger;
-            _dailyReportManager = dailyReportManager;
-        }
+        public CovidController(ICovidDailyReportManager dailyReportManager) => _dailyReportManager = dailyReportManager;
 
         [HttpGet("{country}")]
         public async Task<ActionResult<CovidDailyReport>> Get(Country country)

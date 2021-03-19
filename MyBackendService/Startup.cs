@@ -42,7 +42,8 @@ namespace MyBackendService
 
             services.AddAuthentication("Bearer").AddJwtBearer(options =>
             {
-                options.Authority = "http://192.168.50.207/identityServer";
+                //options.Authority = "http://192.168.0.182/identityServer";
+                options.Authority = "http://localhost:4665";
                 options.RequireHttpsMetadata = false;
                 options.Audience = "muffinscopeapi";
                 options.TokenValidationParameters = new TokenValidationParameters()
@@ -52,7 +53,11 @@ namespace MyBackendService
             });
 
             services.AddTransient<ICovidDailyReportManager, CovidDailyReportManager>();
+            services.AddTransient<IAuthenticationCodeManager, AuthenticationCodeManager>();
             services.AddSingleton<ICacheManager, CacheManager>();
+            services.AddSingleton<ITotpValidator, TotpValidator>();
+            services.AddSingleton<ITotpGenerator, TotpGenerator>();
+            services.AddSingleton<ITotpSetupGenerator, TotpSetupGenerator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
