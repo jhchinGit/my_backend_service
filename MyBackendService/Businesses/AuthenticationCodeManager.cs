@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using MyBackendService.Models;
 using MyBackendService.Models.DTOs;
 using MyBackendService.Services;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Threading.Tasks;
 
 namespace MyBackendService.Businesses
 {
@@ -13,16 +13,19 @@ namespace MyBackendService.Businesses
     {
         private readonly ITotpSetupGenerator _totpSetupGenerator;
         private readonly ITotpValidator _totpValidator;
+        private readonly RepositoryContext _context;
 
         public AuthenticationCodeManager(
             ITotpSetupGenerator totpSetupGenerator,
-            ITotpValidator totpValidator)
+            ITotpValidator totpValidator,
+            RepositoryContext context)
         {
             _totpSetupGenerator = totpSetupGenerator;
             _totpValidator = totpValidator;
+            _context = context;
         }
 
-        public void AuthenticateCode(HttpRequest request, AuthenticationCodeDto authenticationCodeDto,
+        public async Task AuthenticateCode(HttpRequest request, AuthenticationCodeDto authenticationCodeDto,
             Action onSuccess, Action<string> onError)
         {
             if (request == null || !request.Headers.ContainsKey("Authorization") ||
@@ -58,7 +61,7 @@ namespace MyBackendService.Businesses
             var key = token.Payload["client_id"] as string;
 
             var setupGeneratorKey = _totpSetupGenerator.Generate($"{key}muffinsdnbhdwestworld");
-            var isValidTotp = _totpValidator.IsValidTotp($"{key}muffinsdnbhdwestworld", 
+            var isValidTotp = _totpValidator.IsValidTotp($"{key}muffinsdnbhdwestworld",
                 int.Parse(authenticationCodeDto.AuthenticationCode));
 
             if (!isValidTotp)
@@ -66,6 +69,18 @@ namespace MyBackendService.Businesses
                 onError("Invalid Input");
                 return;
             }
+
+            var userProfile = await _context.UserProfiles
+                .SingleOrDefaultAsync(i => i.Username == authenticationCodeDto.Username && i.IsActive == true);
+
+            if (userProfile == null)
+            {
+                onError("Invalid Input");
+                return;
+            }
+
+            userProfile.IsTotpValid = true;
+            await _context.SaveChangesAsync();
 
             onSuccess();
         }

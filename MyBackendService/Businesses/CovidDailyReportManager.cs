@@ -12,16 +12,13 @@ namespace MyBackendService.Businesses
     public class CovidDailyReportManager : ICovidDailyReportManager
     {
         private readonly IHttpClientFactory _clientFactory;
-        private readonly RepositoryContext _context;
         private readonly ICacheManager _cacheManager;
 
         public CovidDailyReportManager(
             IHttpClientFactory clientFactory,
-            RepositoryContext context,
             ICacheManager cacheManager)
         {
             _clientFactory = clientFactory;
-            _context = context;
             _cacheManager = cacheManager;
         }
 
@@ -30,7 +27,6 @@ namespace MyBackendService.Businesses
         {
             MessageQueueService.Send(TopicKey.TraceLog,
                 "CovidDailyReportManager.cs - GetDailyReportAsync(Country), Country: " + country);
-            var userprofile = _context.UserProfiles.SingleOrDefault(i => i.Username == "testing");
             switch (country)
             {
                 case Country.Malaysia:

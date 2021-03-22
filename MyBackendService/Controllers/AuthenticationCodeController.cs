@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MyBackendService.Businesses;
 using MyBackendService.Models.DTOs;
+using System.Threading.Tasks;
 
 namespace MyBackendService.Controllers
 {
@@ -16,12 +17,12 @@ namespace MyBackendService.Controllers
             _authenticationCodeManager = authenticationCodeManager;
 
         [HttpPost]
-        public ActionResult Post(AuthenticationCodeDto authenticationCodeDto)
+        public async Task<ActionResult> Post(AuthenticationCodeDto authenticationCodeDto)
         {
             var isSuccess = false;
             var responseMessage = string.Empty;
 
-            _authenticationCodeManager.AuthenticateCode(Request, authenticationCodeDto,
+            await _authenticationCodeManager.AuthenticateCode(Request, authenticationCodeDto,
                 onSuccess: () =>
                  {
                      isSuccess = true;
