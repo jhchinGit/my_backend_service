@@ -30,7 +30,7 @@ namespace MyBackendService
             services.AddStackExchangeRedisCache(action =>
             {
                 action.InstanceName = "redis";
-                action.Configuration = "localhost:6379";
+                action.Configuration = "localhost:6380"; //connect to docker redis
             });
 
             services.AddDbContext<RepositoryContext>(options =>
@@ -42,8 +42,8 @@ namespace MyBackendService
 
             services.AddAuthentication("Bearer").AddJwtBearer(options =>
             {
-                options.Authority = "http://192.168.0.182/identityServer";
-                //options.Authority = "http://localhost:4665";
+                //options.Authority = "http://192.168.0.182/identityServer";
+                options.Authority = "http://localhost:5250";
                 options.RequireHttpsMetadata = false;
                 options.Audience = "muffinscopeapi";
                 options.TokenValidationParameters = new TokenValidationParameters()
